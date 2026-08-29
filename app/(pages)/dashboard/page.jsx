@@ -1,6 +1,7 @@
 import { useEffect, useState } from 'react';
 import axios from 'axios';
-import Navbar from '../components/Navbar';
+import Navbar from '@/app/components/Navbar';
+
 
 export default function Dashboard() {
   const [properties, setProperties] = useState([]);
