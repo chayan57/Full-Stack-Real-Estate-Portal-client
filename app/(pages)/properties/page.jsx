@@ -14,7 +14,7 @@ function PropertiesPage() {
     const fetchProperties = async () => {
       try {
         const res = await axios.get(
-          "http://localhost:5000/api/properties"
+          "https://full-stack-real-estate-portal-backe.vercel.app/api/properties"
         );
 
         setProperties(res.data.data || []);

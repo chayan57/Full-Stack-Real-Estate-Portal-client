@@ -11,11 +11,11 @@ export default function Dashboard() {
     const fetchData = async () => {
       try {
         // Fetch properties
-        const resProps = await axios.get('http://localhost:5000/api/properties');
+        const resProps = await axios.get('https://full-stack-real-estate-portal-backe.vercel.app/api/properties');
         setProperties(resProps.data.data);
 
         // Fetch Inquiries (For demo purpose getting all)
-        const resInq = await axios.get('http://localhost:5000/api/inquiries');
+        const resInq = await axios.get('https://full-stack-real-estate-portal-backe.vercel.app/api/inquiries');
         setInquiries(resInq.data.data || []);
       } catch (error) {
         console.error(error);
@@ -30,7 +30,7 @@ export default function Dashboard() {
   const handleDelete = async (id) => {
     if (confirm('Are you sure you want to delete this property?')) {
       try {
-        await axios.delete(`http://localhost:5000/api/properties/${id}`);
+        await axios.delete(`https://full-stack-real-estate-portal-backe.vercel.app/api/properties/${id}`);
         setProperties(properties.filter((p) => p._id !== id));
         alert('Property Deleted Successfully');
       } catch (error) {

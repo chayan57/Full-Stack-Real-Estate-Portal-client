@@ -44,7 +44,7 @@ export default function AddProperty() {
     }
 
     try {
-      await axios.post('http://localhost:5000/api/properties', data, {
+      await axios.post('https://full-stack-real-estate-portal-backe.vercel.app/api/properties', data, {
         headers: { 'Content-Type': 'multipart/form-data' },
       });
       alert('Property Added Successfully!');
