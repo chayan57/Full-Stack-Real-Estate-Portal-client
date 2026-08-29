@@ -122,12 +122,10 @@ export default function Footer() {
             </p>
 
             <p className="text-secondary mb-2">
-              📞 +880 1712-345678
+              📞 +880 00000000
             </p>
 
-            <p className="text-secondary mb-0">
-              ✉️ info@estatehub.com
-            </p>
+           
           </div>
 
         </div>
