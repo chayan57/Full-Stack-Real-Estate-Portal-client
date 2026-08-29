@@ -1,69 +1,103 @@
-import Image from "next/image";
-import styles from "./page.module.css";
+"use client";
+
+import { useState, useEffect } from "react";
+import axios from "axios";
+import Navbar from "./components/Navbar";
+import SearchFilter from "./components/SearchFilter";
+import PropertyCard from "./components/PropertyCard";
 
 export default function Home() {
+  const [properties, setProperties] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  const fetchProperties = async (filters = {}) => {
+    setLoading(true);
+
+    try {
+      const res = await axios.get(
+        "http://localhost:5000/api/properties",
+        {
+          params: filters,
+        }
+      );
+
+      console.log("Search filters:", filters);
+      console.log("API response:", res.data);
+
+      setProperties(res.data.data || []);
+    } catch (error) {
+      console.error(
+        "Error fetching properties:",
+        error.response?.data || error.message
+      );
+
+      setProperties([]);
+    } finally {
+      setLoading(false);
+    }
+  };
+
+  useEffect(() => {
+    fetchProperties();
+  }, []);
+
   return (
-    <div className={styles.page}>
-      <main className={styles.main}>
-        <Image
-          className={styles.logo}
-          src="/next.svg"
-          alt="Next.js logo"
-          width={100}
-          height={20}
-          priority
-        />
-        <div className={styles.intro}>
-          <h1>
-            To get started, edit the{" "}
-            <code className={styles.code}>page.js</code> file.
+    <>
+      <Navbar />
+
+      {/* Hero Banner */}
+      <div
+        className="bg-dark text-white text-center py-5 mb-4"
+        style={{ backgroundColor: "#1a252f" }}
+      >
+        <div className="container py-4">
+          <h1 className="display-4 fw-bold">
+            Find Your Dream Property
           </h1>
-          <p>
-            Looking for a starting point or more instructions? Head over to{" "}
-            <a
-              href="https://vercel.com/templates?framework=next.js&utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Templates
-            </a>{" "}
-            or the{" "}
-            <a
-              href="https://nextjs.org/learn?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app"
-              target="_blank"
-              rel="noopener noreferrer"
-            >
-              Learning
-            </a>{" "}
-            center.
+
+          <p className="lead text-light">
+            Explore apartments, houses, and commercial spaces easily.
           </p>
         </div>
-        <div className={styles.ctas}>
-          <a
-            className={styles.primary}
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            <Image
-              className={styles.logo}
-              src="/vercel.svg"
-              alt="Vercel logomark"
-              width={16}
-              height={14}
-            />
-            Deploy Now
-          </a>
-          <a
-            className={styles.secondary}
-            href="https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template&utm_campaign=create-next-app"
-            target="_blank"
-            rel="noopener noreferrer"
-          >
-            Documentation
-          </a>
-        </div>
-      </main>
-    </div>
+      </div>
+
+      <div className="container">
+
+        {/* Search Filter */}
+        <SearchFilter onSearch={fetchProperties} />
+
+        {/* Property List */}
+        <h3 className="fw-bold mb-4">
+          Featured Listings
+        </h3>
+
+        {loading ? (
+          <div className="text-center py-5">
+            <div
+              className="spinner-border text-primary"
+              role="status"
+            >
+              <span className="visually-hidden">
+                Loading...
+              </span>
+            </div>
+          </div>
+        ) : properties.length === 0 ? (
+          <div className="alert alert-info text-center">
+            No properties found matching your criteria.
+          </div>
+        ) : (
+          <div className="row">
+            {properties.map((property) => (
+              <PropertyCard
+                key={property._id}
+                property={property}
+              />
+            ))}
+          </div>
+        )}
+       
+      </div>
+    </>
   );
 }
